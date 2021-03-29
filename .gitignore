@@ -1,0 +1,14 @@
+aclocal.m4
+compile
+config.*
+configure
+depcomp
+install-sh
+ltmain.sh
+Makefile.in
+missing
+package_version
+m4/*
+!m4/attributes.m4
+autom4te.cache/
+build/
