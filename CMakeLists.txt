@@ -5,6 +5,8 @@ option(RNNOISE_COMPILE_OPUS ON)
 
 if(RNNOISE_COMPILE_OPUS)
 	add_definitions(-DCOMPILE_OPUS)
+else()
+  find_package (Opus REQUIRED)
 endif()
 
 # Ignore CRT warnings on MSVC
@@ -39,3 +41,19 @@ target_include_directories(rnnoise PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
+        
+set_target_properties(rnnoise PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/include/rnnoise.h)
+
+# Link opus if needed
+if(NOT RNNOISE_COMPILE_OPUS)
+  target_include_directories(rnnoise PRIVATE ${OPUS_INCLUDE_DIRS})
+  target_link_libraries(rnnoise ${OPUS_LIBRARIES})
+endif()
+
+# Install
+install(TARGETS rnnoise
+  EXPORT rnnoise_Targets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
