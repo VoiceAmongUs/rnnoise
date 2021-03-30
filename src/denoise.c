@@ -495,6 +495,14 @@ float rnnoise_process_frame(DenoiseState *st, float *out, const float *in) {
   return vad_prob;
 }
 
+float rnnoise_process_frame_normal(DenoiseState *st, float *out, const float *in, float *tmp) {
+  int i;
+  for(i=0; i<FRAME_SIZE; i++) tmp[i] = in[i] * 32767.f;
+  float result = rnnoise_process_frame(st, out, tmp);
+  for(i=0; i<FRAME_SIZE; i++) out[i] /= 32767.f;
+  return result;
+}
+
 #if TRAINING
 
 static float uni_rand() {

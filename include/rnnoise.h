@@ -87,11 +87,18 @@ RNNOISE_EXPORT DenoiseState *rnnoise_create(RNNModel *model);
 RNNOISE_EXPORT void rnnoise_destroy(DenoiseState *st);
 
 /**
- * Denoise a frame of samples
+ * Denoise a frame of samples (value range +-32767)
  *
  * in and out must be at least rnnoise_get_frame_size() large.
  */
 RNNOISE_EXPORT float rnnoise_process_frame(DenoiseState *st, float *out, const float *in);
+
+/**
+ * Denoise a frame of samples (value range +-1.0)
+ *
+ * in, out and tmp must be at least rnnoise_get_frame_size() large.
+ */
+RNNOISE_EXPORT float rnnoise_process_frame_normal(DenoiseState *st, float *out, const float *in, float *tmp);
 
 /**
  * Load a model from a file
